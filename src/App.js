@@ -2,10 +2,11 @@ import React from 'react';
 import Rooms from './components/Rooms';
 import Chat from './components/Chat';
 import Login from './components/Login';
+import { connect } from 'react-redux';
 
 import Server from './Server';
 
-export default class App extends React.Component {
+class App extends React.Component {
   constructor()
   {
     super();
@@ -72,3 +73,7 @@ export default class App extends React.Component {
     </div>
   }
 }
+
+export default connect((state) => {
+  return {...state}
+})(App);
