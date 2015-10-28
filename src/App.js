@@ -5,22 +5,12 @@ import Login from './components/Login';
 import { connect } from 'react-redux';
 
 import Server from './Server';
+import { loginUserAction } from './actions/loginActions.js';
 
 class App extends React.Component {
-  constructor()
-  {
-    super();
-    this.state = {
-      userName: null,
-      room: null,
-      rooms: [],
-      messages: []
-    };
-  }
-
   login(userName)
   {
-    this.setState({userName});
+    this.props.dispatch(loginUserAction(userName));
 
     this.server = new Server();
     this.server.onMessage = (f,c,m) => this.handleMessage(f,c,m);
@@ -29,7 +19,7 @@ class App extends React.Component {
 
   send(msg)
   {
-    this.server.send(this.state.userName, this.state.room, msg);
+    this.server.send(this.props.userName, this.props.room, msg);
   }
 
 
@@ -54,22 +44,22 @@ class App extends React.Component {
   {
     console.log(from, room, msg);
     
-    if(room != this.state.room)
+    if(room != this.props.room)
       return;
 
-    var messages = this.state.messages;
+    var messages = this.props.messages;
     messages.push({from, msg});
 
     this.setState({messages});
   }
 
   render() {
-    if(this.state.userName == null)
+    if(this.props.userName == null)
       return <Login onLogin={(n) => this.login(n)} />
 
     return <div id='app'>
-      <Rooms room={this.state.room} items={this.state.rooms} onSelect={(r) => this.selectRoom(r)} />
-      <Chat items={this.state.messages} user={this.state.userName} onSend={(m) => this.send(m)} />
+      <Rooms room={this.props.room} items={this.props.rooms} onSelect={(r) => this.selectRoom(r)} />
+      <Chat items={this.props.messages} user={this.props.userName} onSend={(m) => this.send(m)} />
     </div>
   }
 }
