@@ -39,5 +39,6 @@ export default combineReducers({
    room: roomReducer,
    userName: userReducer,
    rooms: roomListReducer,
-   messages: messagesReducer
+   messages: messagesReducer,
+   counters: (state=null) => state
 });

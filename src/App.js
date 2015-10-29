@@ -21,7 +21,11 @@ class App extends React.Component {
       return <Login onLogin={(n) => dispatch(loginUserAction(n))} />;
 
     return <div id='app'>
-      <Rooms room={this.props.room} items={this.props.rooms} onSelect={(r) => dispatch(selectRoomAction(r))} />
+      <Rooms
+         counters={this.props.counters}
+         room={this.props.room}
+         items={this.props.rooms}
+         onSelect={(r) => dispatch(selectRoomAction(r))} />
       <Chat items={this.props.messages} user={this.props.userName} onSend={(m) => this.send(m)} />
     </div>
   }
