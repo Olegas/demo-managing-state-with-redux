@@ -31,7 +31,7 @@ ReactDOM.render(
          <App />
       </Provider>
       <DebugPanel top right bottom>
-         <DevTools store={store} monitor={SliderMonitor} />
+         <DevTools store={store} monitor={DiffMonitor} />
       </DebugPanel>
    </div>,
    document.getElementById('root'));

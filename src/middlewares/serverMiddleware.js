@@ -27,7 +27,9 @@ export default (store) => {
             server.getRooms();
          }
          if (action.type == ROOMS_LIST) {
+            next(action);
             store.dispatch(selectRoomAction(action.rooms[0]));
+            return;
          }
          next(action);
       }
