@@ -4,7 +4,6 @@ import Chat from './components/Chat';
 import Login from './components/Login';
 import { connect } from 'react-redux';
 
-import Server from './Server';
 import { loginUserAction } from './actions/loginActions.js';
 import { sendMessageAction } from './actions/serverActions.js';
 import { selectRoomAction } from './actions/roomActions.js';
@@ -13,16 +12,7 @@ class App extends React.Component {
 
   send(msg)
   {
-    this._server.send(this.props.userName, this.props.room, msg);
-  }
-
-  componentDidMount() {
-    this._server = new Server(this.props.dispatch);
-  }
-
-  selectRoom(room) {
-    this.props.dispatch(selectRoomAction(room));
-    this._server.getLog(room);
+    this.props.dispatch(sendMessageAction(this.props.userName, this.props.room, msg));
   }
 
   render() {
@@ -31,7 +21,7 @@ class App extends React.Component {
       return <Login onLogin={(n) => dispatch(loginUserAction(n))} />;
 
     return <div id='app'>
-      <Rooms room={this.props.room} items={this.props.rooms} onSelect={(r) => this.selectRoom(r)} />
+      <Rooms room={this.props.room} items={this.props.rooms} onSelect={(r) => dispatch(selectRoomAction(r))} />
       <Chat items={this.props.messages} user={this.props.userName} onSend={(m) => this.send(m)} />
     </div>
   }

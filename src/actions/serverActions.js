@@ -33,6 +33,6 @@ export function sendMessageAction(from, room, text) {
       type: SEND_MESSAGE,
       from: from,
       room: room,
-      message: text
+      msg: text
    }
 }

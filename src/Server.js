@@ -3,13 +3,13 @@ import { roomListReceived, messageReceived, fullLogReceived } from './actions/se
 
 export default class Server
 {
-  constructor(dispatch)
+  constructor(store)
   {
     this.server = window.io('http://'+document.location.hostname+':8088');
 
-    this.server.on('new', (m) => dispatch(messageReceived(m.from, m.room, m.msg)));
-    this.server.on('log', (m) => dispatch(fullLogReceived(m)));
-    this.server.on('list', (m) => dispatch(roomListReceived(m)));
+    this.server.on('new', (m) => store.dispatch(messageReceived(m.from, m.room, m.msg)));
+    this.server.on('log', (m) => store.dispatch(fullLogReceived(m)));
+    this.server.on('list', (m) => store.dispatch(roomListReceived(m)));
 
     console.log('Server: Подключаюсь');
   }
