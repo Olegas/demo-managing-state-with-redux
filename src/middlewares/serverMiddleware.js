@@ -1,5 +1,5 @@
 import Server from '../Server';
-import { SEND_MESSAGE, ROOMS_LIST } from '../actions/serverActions';
+import { SEND_MESSAGE, ROOMS_LIST, MESSAGE_IN_ROOM } from '../actions/serverActions';
 import { SELECT_ROOM, selectRoomAction } from '../actions/roomActions';
 import { LOGIN_USER } from '../actions/loginActions';
 
@@ -9,6 +9,11 @@ export default (store) => {
       return (action) => {
          if (action.type == SEND_MESSAGE) {
             server.send(action.from, action.room, action.msg);
+         }
+         if (action.type == MESSAGE_IN_ROOM) {
+            if (store.getState().room !== action.data.room) {
+               return;
+            }
          }
          if (action.type == SELECT_ROOM) {
             server.getLog(action.room);
