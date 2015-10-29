@@ -1,12 +1,15 @@
+import { roomListReceived, messageReceived, fullLogReceived } from './actions/serverActions.js';
+
+
 export default class Server
 {
-  constructor()
+  constructor(dispatch)
   {
     this.server = window.io('http://'+document.location.hostname+':8088');
 
-    this.server.on('new', (m) => this.onMessage(m.from, m.room, m.msg));
-    this.server.on('log', (l) => this.onLog(l));
-    this.server.on('list', (m) => this.onListChats(m));
+    this.server.on('new', (m) => dispatch(messageReceived(m.from, m.room, m.msg)));
+    this.server.on('log', (m) => dispatch(fullLogReceived(m)));
+    this.server.on('list', (m) => dispatch(roomListReceived(m)));
 
     console.log('Server: Подключаюсь');
   }
@@ -16,27 +19,8 @@ export default class Server
     this.server.emit('msg', {from, room, msg});
   }
 
-  onMessage(from, room, msg)
-  {
-    console.log('Server: Пришло сообщение а какое не скажу');
-  }
-
-  getLog(room, cb)
-  {
+  getLog(room) {
     this.server.emit('getlog', room);
-    this.logcb = cb;
   }
 
-  onLog(log)
-  {
-    if(!log)
-      log = [];
-
-    if(this.logcb)
-      this.logcb(log);
-  }
-
-  onListChats(list)
-  {
-  }
 }

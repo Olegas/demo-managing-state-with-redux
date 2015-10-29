@@ -6,56 +6,29 @@ import { connect } from 'react-redux';
 
 import Server from './Server';
 import { loginUserAction } from './actions/loginActions.js';
+import { sendMessageAction } from './actions/serverActions.js';
+import { selectRoomAction } from './actions/roomActions.js';
 
 class App extends React.Component {
-  login(userName)
-  {
-    this.props.dispatch(loginUserAction(userName));
-
-    this.server = new Server();
-    this.server.onMessage = (f,c,m) => this.handleMessage(f,c,m);
-    this.server.onListChats = (l) => this.handleList(l);
-  }
 
   send(msg)
   {
-    this.server.send(this.props.userName, this.props.room, msg);
+    this._server.send(this.props.userName, this.props.room, msg);
   }
 
-
-  selectRoom(room)
-  {
-    this.setState({
-      room,
-      messages: []
-    });
-
-    this.server.getLog(room, (messages) => this.setState({messages}));
+  componentDidMount() {
+    this._server = new Server(this.props.dispatch);
   }
 
-  handleList(rooms)
-  {
-    console.log('rooms', rooms);
-    this.setState({rooms});
-    this.selectRoom(rooms[0]);
-  }
-
-  handleMessage(from, room, msg)
-  {
-    console.log(from, room, msg);
-    
-    if(room != this.props.room)
-      return;
-
-    var messages = this.props.messages;
-    messages.push({from, msg});
-
-    this.setState({messages});
+  selectRoom(room) {
+    this.props.dispatch(selectRoomAction(room));
+    this._server.getLog(room);
   }
 
   render() {
+    var { dispatch } = this.props;
     if(this.props.userName == null)
-      return <Login onLogin={(n) => this.login(n)} />
+      return <Login onLogin={(n) => dispatch(loginUserAction(n))} />;
 
     return <div id='app'>
       <Rooms room={this.props.room} items={this.props.rooms} onSelect={(r) => this.selectRoom(r)} />

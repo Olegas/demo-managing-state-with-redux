@@ -30,7 +30,7 @@ io.on('connection', function(socket) {
 
   socket.on('getlog', function(room) {
     console.log('sending log for ' + room, logs[room]);
-    socket.emit('log', logs[room]);
+    socket.emit('log', logs[room] || []);
   });
 
   console.log('connect');

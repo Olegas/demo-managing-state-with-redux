@@ -13,7 +13,7 @@ export default class Chat extends React.Component {
   {
     console.log(this.props);
     return <div style={{overflowY: 'auto', height: '300px'}}>
-      {this.props.items.map((msg) =>
+      {(this.props.items || []).map((msg) =>
         <p>{msg.from}: {msg.msg}</p>
       )}
     </div>
