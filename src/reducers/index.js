@@ -1,6 +1,7 @@
 import { LOGIN_USER } from '../actions/loginActions.js';
 import { SELECT_ROOM } from '../actions/roomActions.js';
 import { ROOMS_LIST, MESSAGE_IN_ROOM, FULL_LOG } from '../actions/serverActions.js';
+import { INCREMENT_COUNTER, RESET_COUNTER } from '../actions/counterActions.js';
 
 import { combineReducers } from 'redux';
 
@@ -35,10 +36,21 @@ function messagesReducer(state=[], action) {
    return state;
 }
 
+function countersReducer(state={}, action) {
+   if (action.type == RESET_COUNTER) {
+      return Object.assign({}, state, { [action.room]: 0 });
+   }
+   if (action.type == INCREMENT_COUNTER) {
+      let currentCounter = state[action.room] || 0;
+      return Object.assign({}, state, { [action.room]: currentCounter + 1 });
+   }
+   return state;
+}
+
 export default combineReducers({
    room: roomReducer,
    userName: userReducer,
    rooms: roomListReducer,
    messages: messagesReducer,
-   counters: (state=null) => state
+   counters: countersReducer
 });
