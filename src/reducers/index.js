@@ -2,33 +2,45 @@ import { LOGIN_USER } from '../actions/loginActions.js';
 import { SELECT_ROOM } from '../actions/roomActions.js';
 import { ROOMS_LIST, MESSAGE_IN_ROOM, FULL_LOG } from '../actions/serverActions.js';
 
+import { combineReducers } from 'redux';
 
-export default function(state, action) {
-
+function userReducer(state=null, action) {
    if (action.type == LOGIN_USER) {
-      let {userName, ...restState} = state;
-      return Object.assign({}, restState, { userName: action.userName });
-   }
-   if (action.type == SELECT_ROOM) {
-      let {room, ...restState} = state;
-      return Object.assign({}, restState, { room: action.room });
-   }
-   if (action.type == ROOMS_LIST) {
-      let {room, rooms, ...restState} = state;
-      if (room == null) {
-         room = action.rooms[0];
-      }
-      rooms = action.rooms;
-      return Object.assign({}, restState, { room, rooms });
-   }
-   if (action.type == MESSAGE_IN_ROOM) {
-      let { messages, ...restState} = state;
-      messages = [...messages, action.data];
-      return Object.assign({}, restState, { messages });
-   }
-   if (action.type == FULL_LOG) {
-      let { messages, ...restState} = state;
-      return Object.assign({}, restState, { messages: action.log });
+      return action.userName;
    }
    return state;
 }
+
+function roomReducer(state=null, action) {
+   if (action.type == SELECT_ROOM) {
+      return action.room;
+   }
+   if (action.type == ROOMS_LIST && state == null) {
+      return action.rooms[0];
+   }
+   return state;
+}
+
+function roomListReducer(state=[], action) {
+   if (action.type == ROOMS_LIST) {
+      return action.rooms;
+   }
+   return state;
+}
+
+function messagesReducer(state=[], action) {
+   if (action.type == MESSAGE_IN_ROOM) {
+      return [...state, action.data];
+   }
+   if (action.type == FULL_LOG) {
+      return action.log;
+   }
+   return state;
+}
+
+export default combineReducers({
+   room: roomReducer,
+   userName: userReducer,
+   rooms: roomListReducer,
+   messages: messagesReducer
+});
