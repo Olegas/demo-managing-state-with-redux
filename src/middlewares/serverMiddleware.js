@@ -1,6 +1,7 @@
 import Server from '../Server';
-import { SEND_MESSAGE } from '../actions/serverActions';
-import { SELECT_ROOM } from '../actions/roomActions';
+import { SEND_MESSAGE, ROOMS_LIST } from '../actions/serverActions';
+import { SELECT_ROOM, selectRoomAction } from '../actions/roomActions';
+import { LOGIN_USER } from '../actions/loginActions';
 
 export default (store) => {
    var server = new Server(store);
@@ -11,6 +12,12 @@ export default (store) => {
          }
          if (action.type == SELECT_ROOM) {
             server.getLog(action.room);
+         }
+         if (action.type == LOGIN_USER) {
+            server.getRooms();
+         }
+         if (action.type == ROOMS_LIST) {
+            store.dispatch(selectRoomAction(action.rooms[0]));
          }
          next(action);
       }

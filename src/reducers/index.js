@@ -15,9 +15,6 @@ function roomReducer(state=null, action) {
    if (action.type == SELECT_ROOM) {
       return action.room;
    }
-   if (action.type == ROOMS_LIST && state == null) {
-      return action.rooms[0];
-   }
    return state;
 }
 

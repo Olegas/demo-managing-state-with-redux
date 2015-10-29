@@ -19,13 +19,16 @@ function saveLog(from, room, msg)
 }
 
 io.on('connection', function(socket) {
-  socket.emit('list', chatList);
 
   socket.on('msg', function(msg) {
     saveLog(msg.from, msg.room, msg.msg);
     console.log(msg);
     socket.emit('new', msg);
     socket.broadcast.emit('new', msg);
+  });
+
+  socket.on('getRooms', function(){
+    socket.emit('list', chatList);
   });
 
   socket.on('getlog', function(room) {

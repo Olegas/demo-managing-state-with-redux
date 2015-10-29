@@ -23,4 +23,8 @@ export default class Server
     this.server.emit('getlog', room);
   }
 
+  getRooms() {
+    this.server.emit('getRooms');
+  }
+
 }
