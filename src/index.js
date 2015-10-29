@@ -11,9 +11,7 @@ var initialState = {
    room: null,
    rooms: [],
    messages: [],
-   counters: {
-      'Общий': 2
-   }
+   counters: {}
 };
 
 var createStoreWithMiddlewares = compose(
